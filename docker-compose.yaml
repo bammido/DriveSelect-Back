@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+    postgres:
+        image: postgres:14-alpine
+        ports:
+        - "5430:5432"
+        volumes:
+        - ~/apps/postgres:/var/lib/postgresql/data
+        environment:
+            POSTGRES_PASSWORD: "12345"
+            POSTGRES_USER: "postgres"
+            POSTGRES_DB: "postgres"
+
+    DriveSelect_Back:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        container_name: DriveSelect-Back
+        ports:
+            - "8080:3333"
+        volumes:
+            - ./:/app
+            - /app/node_modules
+        tty: true
+        depends_on:
+        - postgres
+        restart: always
