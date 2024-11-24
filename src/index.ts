@@ -1,5 +1,8 @@
+import { rideRouter } from "./api/ride/ride.router";
 import { app } from "./app";
 
-app.listen(3333, () => {
-    console.log(`Server rodando http://localhost:${3333}`);
+app.use('/ride', rideRouter)
+
+app.listen(8080, () => {
+    console.log(`Server rodando http://localhost:${8080}`);
 })

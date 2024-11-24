@@ -1,27 +1,60 @@
-import { v2 } from "@googlemaps/routing"
-import { IcallComputeRoutesArgs } from "./routeApi.dto";
+import { IcallComputeRoutesArgs, IcallcomputeRoutesRes, RouteApiError } from "./routeApi.dto"
+import { googleRouteApiService } from "./googleRouteApi";
 
 export default class RouteApiService {
-    private routingClient = new v2.RoutesClient()
 
-    async callComputeRoutes({ origin, destination }: IcallComputeRoutesArgs) {
-        const request = {
-          origin,
-          destination,
-        };
+    constructor() {
+        this.callComputeRoutes = this.callComputeRoutes.bind(this);
+    }
 
-        const response = await this.routingClient.computeRoutes(request, {
-          otherArgs: {
-            headers: {
-              "Content-Type": "application/json",
-              "X-Goog-Api-Key": "YOUR_API_KEY",
-              "X-Goog-FieldMask":
-                "routes.legs",
-            },
-          },
-        });
-        console.log(response);
+    async callComputeRoutes({ origin, destination }: IcallComputeRoutesArgs): Promise<IcallcomputeRoutesRes | RouteApiError> {
+        try {
+            const request = {
+                origin,
+                destination,
+              };
+      
+              const response = await googleRouteApiService.post<IcallcomputeRoutesRes>('/directions/v2:computeRoutes', request, {
+                  headers: {
+                      "Content-Type": "application/json",
+                      "X-Goog-FieldMask": "routes.legs",
+                      "X-Goog-Api-Key": process.env.GOOGLE_API_KEY
+                  }
+              })
+      
+              console.log(response.data);
+      
+              return response.data
+        } catch (error: any) {
+            if (error.response.status === 403) {
+                return {
+                    status: 403,
+                    message: 'A chave api está faltando ou está inválida',
+                    error: true,
+                    originalMessage: error.response.data.error.message
+                }
+            }
 
-        return response
+            if(error.response.status == 400) {
+                return {
+                    status: 400,
+                    message: 'Parametros inválidos',
+                    error: true,
+                    originalMessage: error.response.data.error.message
+                }
+            }
+
+            return {
+                status: 500,
+                message: 'Erro no servidor',
+                error: true,
+                originalMessage: error.message
+            }
+        }
+
+    }
+    
+    isRouteApiError(response: IcallcomputeRoutesRes | RouteApiError): response is RouteApiError {
+        return (response as RouteApiError).error === true;
     }
 }
