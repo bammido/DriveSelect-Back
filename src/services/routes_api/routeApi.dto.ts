@@ -19,15 +19,3 @@ type Waypoint = {
     location?: ILocation
     address: string;
 }
-
-export interface IcallComputeRoutesRes {
-    routes: IRoutes[];
-}
-
-interface IRoutes {
-    distanceMeters: number;
-    duration: string;
-    polyline: {
-        encodedPolyline: string;
-    }
-}

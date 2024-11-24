@@ -16,7 +16,7 @@ export default class RouteApiService {
               "Content-Type": "application/json",
               "X-Goog-Api-Key": "YOUR_API_KEY",
               "X-Goog-FieldMask":
-                "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline",
+                "routes.legs",
             },
           },
         });
