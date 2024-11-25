@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { rideEstimateValidator } from "./ride.validators";
 import RideService from "./ride.service";
+import driverRepository from "../../database/repository/driver.repository";
 
 export default class RideController {
     private rideService = new RideService()
@@ -35,32 +36,12 @@ export default class RideController {
 
         const response = await this.rideService.estimate(result.data)
 
-        // if (response.error_code) {
-
-        // }
-
-        // const routeResponse = await this?.routeApiService?.callComputeRoutes({
-        //     origin: {
-        //         address: 'R. Dr. Carneiro Ribeiro, 334 - PajuçaraNatal - RN, 59131-830'
-        //     },
-        //     destination: {
-        //         address: 'Rua Monteiro Lobato - CandeláriaNatal - RN, 59065-060'
-        //     }
-        // })
-
-        // if(this.routeApiService.isRouteApiError(routeResponse)) {
-        //     res.status(routeResponse.status).send({
-        //         error_code: "API_ERROR",
-        //         error_description: routeResponse.message
-        //        }
-        //     )
-
-        //     return
-        // }
-
-
-
         res.send({ response: response })
-        // res.send({ response: 'teste' })
+    }
+
+    async teste(req: Request, res: Response) {
+        const drivers = await driverRepository.estimateDriversPrice({ distanceMeters: 16910 })
+
+        res.send({response: drivers})
     }
 }

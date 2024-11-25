@@ -1,3 +1,4 @@
+import driverRepository from "../../database/repository/driver.repository";
 import RouteApiService from "../../services/routes_api/routeApi.service";
 import { IRideServiceCalculateRouteArgs, IRideServiceCalculateRouteRes, IRideServiceError } from "./ride.dto"
 
@@ -27,6 +28,8 @@ export default class RideService {
 
         const routeLeg = routeResponse.routes[0].legs[0]
 
+        const options = await driverRepository.estimateDriversPrice({ distanceMeters: routeLeg.distanceMeters }) 
+
         const response = {
             origin: {
                 latitude: routeLeg.startLocation.latLng.latitude,
@@ -38,7 +41,7 @@ export default class RideService {
             },
             distance: routeLeg.distanceMeters,
             duration: routeLeg.duration,
-            options: [],
+            options,
             routeResponse
         }
 

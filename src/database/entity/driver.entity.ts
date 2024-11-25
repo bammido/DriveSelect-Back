@@ -38,10 +38,10 @@ export class Driver {
     @Column({name: 'min_km', type: 'float'})
     min_km: number;
 
-    @OneToMany(() => Review, (review) => review.driver_id)
+    @OneToMany(() => Review, (review) => review.driver)
     reviews: Review[];
     
-    @OneToMany(() => Ride, (ride) => ride.driver_id)
+    @OneToMany(() => Ride, (ride) => ride.driver)
     rides: Ride[];
 
     @OneToOne(() => Vehicle, vehicle => vehicle.id)

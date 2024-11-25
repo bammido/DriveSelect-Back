@@ -22,9 +22,9 @@ export class Customer {
     })
     public updated_at: Date;
 
-    @OneToMany(() => Review, (review) => review.customer_id)
+    @OneToMany(() => Review, (review) => review.customer)
     reviews: Review[];
 
-    @OneToMany(() => Ride, (ride) => ride.customer_id)
+    @OneToMany(() => Ride, (ride) => ride.customer)
     rides: Ride[];
 }

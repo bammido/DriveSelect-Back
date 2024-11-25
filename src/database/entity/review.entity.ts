@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, JoinColumn, ManyToOne, OneToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, JoinColumn, ManyToOne } from "typeorm"
 import { Driver } from "./driver.entity";
 import { Customer } from "./customer.entity";
 
@@ -26,13 +26,13 @@ export class Review {
     rating: number;
 
     @Column({ name: 'comment', type: 'varchar'})
-    comment: number;
+    comment: string;
 
-    @Column({ name: 'driver_id', type: 'varchar'})
-    driver_id: string;
+    @Column({ name: 'driver_id', type: 'int'})
+    driver_id: number;
 
-    @Column({ name: 'customer_id', type: 'int'})
-    customer_id: number;
+    @Column({ name: 'customer_id', type: 'varchar'})
+    customer_id: string;
 
     @ManyToOne(() => Driver, driver => driver.id)
     @JoinColumn({ name: 'driver_id' })

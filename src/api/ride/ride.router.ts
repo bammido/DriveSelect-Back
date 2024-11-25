@@ -5,3 +5,4 @@ export const rideRouter: Router = express.Router()
 const rideController = new RideController()
 
 rideRouter.post('/estimate', rideController.estimate)
+rideRouter.get('/estimate', rideController.teste)
