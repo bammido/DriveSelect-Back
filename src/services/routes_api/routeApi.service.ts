@@ -1,5 +1,5 @@
 import { IcallComputeRoutesArgs, IcallcomputeRoutesRes, RouteApiError } from "./routeApi.dto"
-import { googleRouteApiService } from "./googleRouteApi";
+import { googleRouteApi } from "./googleRouteApi";
 
 export default class RouteApiService {
 
@@ -14,15 +14,13 @@ export default class RouteApiService {
                 destination,
               };
       
-              const response = await googleRouteApiService.post<IcallcomputeRoutesRes>('/directions/v2:computeRoutes', request, {
+              const response = await googleRouteApi.post<IcallcomputeRoutesRes>('/directions/v2:computeRoutes', request, {
                   headers: {
                       "Content-Type": "application/json",
                       "X-Goog-FieldMask": "routes.legs",
                       "X-Goog-Api-Key": process.env.GOOGLE_API_KEY
                   }
               })
-      
-              console.log(response.data);
       
               return response.data
         } catch (error: any) {
@@ -53,7 +51,7 @@ export default class RouteApiService {
         }
 
     }
-    
+
     isRouteApiError(response: IcallcomputeRoutesRes | RouteApiError): response is RouteApiError {
         return (response as RouteApiError).error === true;
     }

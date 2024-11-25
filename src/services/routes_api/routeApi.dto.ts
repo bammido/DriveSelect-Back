@@ -23,7 +23,7 @@ type Waypoint = {
 export interface IcallcomputeRoutesRes {
     routes: {
         legs: ILeg[]
-    } 
+    }[]
 }
 
 interface ILeg {

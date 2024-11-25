@@ -1,38 +1,66 @@
 import { Request, Response } from "express";
-import RouteApiService from "../../services/routes_api/routeApi.service";
+import { rideEstimateValidator } from "./ride.validators";
+import RideService from "./ride.service";
 
 export default class RideController {
-    private routeApiService = new RouteApiService();
+    private rideService = new RideService()
 
     constructor() {
-        this.calculateRide = this.calculateRide.bind(this);
+        this.estimate = this.estimate.bind(this);
     }
 
-    async calculateRide(req: Request, res: Response) {
-        
-        res.status(400).send({
-            error_code: "INVALID_DATA",
-            error_description: "Os dados fornecidos no corpo da requisição são inválidos"
-           }
-        )
+    async estimate(req: Request, res: Response) {
 
-        const routeResponse = await this?.routeApiService?.callComputeRoutes({
-            origin: {
-                address: 'R. Dr. Carneiro Ribeiro, 334 - PajuçaraNatal - RN, 59131-830'
-            },
-            destination: {
-                address: 'Rua Monteiro Lobato - CandeláriaNatal - RN, 59065-060'
-            }
-        })
+        const { body } = req
 
-        if(this.routeApiService.isRouteApiError(routeResponse)) {
-            res.status(routeResponse.status).send({
-                error_code: "API_ERROR",
-                error_description: routeResponse.message
-               }
-            )
+        const result = rideEstimateValidator.safeParse(body)
+
+        if(!result.success) {
+            res.status(400).send({
+                error_code: "INVALID_DATA",
+                error_description: result.error.issues[0].message
+            })
+
+            return
         }
 
-        res.send({ response: routeResponse })
+        if(result.data.destination === result.data.origin) {
+            res.status(400).send({
+                error_code: "INVALID_DATA",
+                error_description: "Os endereços de origem e destino não podem ser o mesmo endereço"
+            })
+
+            return
+        }
+
+        const response = await this.rideService.estimate(result.data)
+
+        // if (response.error_code) {
+
+        // }
+
+        // const routeResponse = await this?.routeApiService?.callComputeRoutes({
+        //     origin: {
+        //         address: 'R. Dr. Carneiro Ribeiro, 334 - PajuçaraNatal - RN, 59131-830'
+        //     },
+        //     destination: {
+        //         address: 'Rua Monteiro Lobato - CandeláriaNatal - RN, 59065-060'
+        //     }
+        // })
+
+        // if(this.routeApiService.isRouteApiError(routeResponse)) {
+        //     res.status(routeResponse.status).send({
+        //         error_code: "API_ERROR",
+        //         error_description: routeResponse.message
+        //        }
+        //     )
+
+        //     return
+        // }
+
+
+
+        res.send({ response: response })
+        // res.send({ response: 'teste' })
     }
 }
