@@ -4,25 +4,37 @@ services:
     postgres:
         image: postgres:14-alpine
         ports:
-        - "5430:5432"
+        - "5428:5432"
         volumes:
         - ~/apps/postgres:/var/lib/postgresql/data
         environment:
             POSTGRES_PASSWORD: "12345"
             POSTGRES_USER: "postgres"
             POSTGRES_DB: "postgres"
+        networks:
+        - minha_rede
 
-    DriveSelect_Back:
+    drive-select-back:
         build:
             context: ./
             dockerfile: Dockerfile
-        container_name: DriveSelect-Back
+        container_name: drive-select-back
         ports:
-            - "8080:3333"
+            - "8080:8080"
         volumes:
             - ./:/app
             - /app/node_modules
+        environment:
+            TYPEORM_HOST: postgres
+            TYPEORM_PORT: 5432
         tty: true
         depends_on:
         - postgres
         restart: always
+        networks:
+        - minha_rede
+
+
+networks:
+  minha_rede:
+    driver: bridge
