@@ -6,4 +6,3 @@ const rideController = new RideController()
 
 rideRouter.post('/estimate', rideController.estimate)
 rideRouter.patch('/confirm', rideController.estimate)
-rideRouter.get('/estimate', rideController.teste)
