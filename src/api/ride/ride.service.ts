@@ -89,6 +89,33 @@ export default class RideService {
          }
     }
 
+    async getRides({
+        customer_id,
+        driver_id
+    }: {
+        customer_id: string;
+        driver_id?: number;
+    }) {
+        const rides =  driver_id ? await this.rideRepository.getRides({ customer_id, driver_id }) : await this.rideRepository.getRides({ customer_id })
+
+        if(!rides.length) {
+            return {
+                error: true,
+                error_code: "NO_RIDES_FOUND",
+                error_description: "Nenhum registro encontrado",
+                status: 404
+            }
+        }
+
+        return {
+            customer_id,
+            rides: rides.map(ride => ({...ride, driver: {
+                id: ride.driver.id,
+                name: ride.driver.name
+            }}))
+        }
+    }
+
     isRideServiceError(response: any | IRideServiceError): response is IRideServiceError {
         return (response as IRideServiceError).error === true;
     }

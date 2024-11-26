@@ -18,3 +18,8 @@ export const rideConfirmValidator = z.object({
     }),
     value: z.number()
 });
+
+export const getRideValidator = z.object({
+    customer_id: z.string().min(1, "O id do usuário não pode estar em branco"),
+    driver_id: z.number({ message: "Motorista invalido" }).nullable()
+})

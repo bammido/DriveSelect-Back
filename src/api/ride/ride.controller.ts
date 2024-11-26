@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { rideConfirmValidator, rideEstimateValidator } from "./ride.validators";
+import { getRideValidator, rideConfirmValidator, rideEstimateValidator } from "./ride.validators";
 import RideService from "./ride.service";
 
 export default class RideController {
@@ -7,12 +7,16 @@ export default class RideController {
 
     constructor() {
         this.estimate = this.estimate.bind(this);
+        this.confirm = this.confirm.bind(this);
+        this.getRide = this.getRide.bind(this);
     }
 
     async estimate(req: Request, res: Response) {
 
        try {
-            const { body } = req
+
+           const { body } = req
+           console.log('estimate', body)
 
             const result = rideEstimateValidator.safeParse(body)
 
@@ -47,7 +51,7 @@ export default class RideController {
 
             res.send(response)
        } catch (error: any) {
-            res.send(500).send({
+            res.status(500).send({
                 error_code: "SERVER_ERROR",
                 error_description: error.message
             })
@@ -78,7 +82,7 @@ export default class RideController {
                 return
             }
 
-            const response = this.rideService.confirm(result.data)
+            const response = await this.rideService.confirm(result.data)
 
             if(this.rideService.isRideServiceError(response)){
                 res.send(response.status).send({
@@ -91,7 +95,44 @@ export default class RideController {
 
             res.send(response)
         } catch (error: any) {
-            res.send(500).send({
+            res.status(500).send({
+                error_code: "SERVER_ERROR",
+                error_description: error.message
+            })
+        }
+    }
+
+    async getRide(req: Request, res: Response) {
+        try {
+            const { params, query } = req
+
+            const { customer_id } = params
+
+            const { driver_id } = query
+
+            const result = getRideValidator.safeParse({
+                customer_id,
+                driver_id: driver_id ? Number(driver_id) : null
+            })
+
+            if(!result.success) {
+                res.status(400).send({
+                    error_code: "INVALID_DATA",
+                    error_description: result.error.issues[0].message
+                })
+
+                return
+            }
+
+            const rides = await this.rideService.getRides({
+                customer_id,
+                driver_id: driver_id? Number(driver_id) : undefined
+            })
+
+            res.send(rides)
+        } catch (error: any) {
+            console.log(error)
+            res.status(500).send({
                 error_code: "SERVER_ERROR",
                 error_description: error.message
             })

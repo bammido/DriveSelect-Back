@@ -32,6 +32,7 @@ export class PopulateTables1732505747383 implements MigrationInterface {
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
                 delete from reviews;
+                delete from rides;
                 delete from drivers;
                 delete from vehicles;
                 delete from customers;

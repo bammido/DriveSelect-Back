@@ -31,7 +31,8 @@ export class CreateTables1732505747373 implements MigrationInterface {
                     name: 'id',
                     type: 'int',
                     isPrimary: true,
-                    generationStrategy: "increment"
+                    generationStrategy: "increment",
+                    isGenerated: true,
                 },
                 {
                     name: 'created_at',
@@ -71,7 +72,8 @@ export class CreateTables1732505747373 implements MigrationInterface {
                     name: 'id',
                     type: 'int',
                     isPrimary: true,
-                    generationStrategy: "increment"
+                    generationStrategy: "increment",
+                    isGenerated: true,
                 },
                 {
                     name: 'created_at',
@@ -123,7 +125,8 @@ export class CreateTables1732505747373 implements MigrationInterface {
                     name: 'id',
                     type: 'int',
                     isPrimary: true,
-                    generationStrategy: "increment"
+                    generationStrategy: "increment",
+                    isGenerated: true,
                 },
                 {
                     name: 'created_at',
@@ -179,7 +182,8 @@ export class CreateTables1732505747373 implements MigrationInterface {
                     name: 'id',
                     type: 'int',
                     isPrimary: true,
-                    generationStrategy: "increment"
+                    generationStrategy: "increment",
+                    isGenerated: true,
                 },
                 {
                     name: 'created_at',
@@ -190,6 +194,11 @@ export class CreateTables1732505747373 implements MigrationInterface {
                     name: 'updated_at',
                     type: 'timestamp',
                     default: 'now()',
+                },
+                {
+                    name: 'date',
+                    type: 'timestamp',
+                    default: 'now()'
                 },
                 {
                     name: 'customer_id',

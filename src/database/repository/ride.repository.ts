@@ -16,4 +16,20 @@ export class RideRepository {
     }) {
         return await this.driverRepository.save(newRide)
     }
+
+    async getRides( whereOptions: {
+        customer_id: string;
+        driver_id?: number;
+    }) {
+        return await this.driverRepository.find({ 
+            where: whereOptions,
+            order: {
+                created_at: {
+                    direction: "DESC"
+                }
+            },
+            select: ["driver", "destination", "distance", "duration", "origin", "value", "id", "date"],
+            relations: { driver: true}
+        })
+    }
 }

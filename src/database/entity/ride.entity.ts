@@ -13,6 +13,13 @@ export class Ride {
         default: () => 'CURRENT_TIMESTAMP(6)',
     })
     public created_at: Date;
+    
+    @CreateDateColumn({
+        name: 'date',
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+    })
+    public date: Date;
 
     @UpdateDateColumn({
         name: 'updated_at',
