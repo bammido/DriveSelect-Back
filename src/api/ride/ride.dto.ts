@@ -32,6 +32,25 @@ interface IDriverOption {
 }
 
 export interface IRideServiceError {
+    status: number;
+    error: boolean;
     error_code: string;
     error_description: string;
+}
+
+export interface IRideServiceConfirmArgs {
+    customer_id: string;
+    origin: string;
+    destination: string;
+    value: number;
+    distance: number;
+    duration: string;
+    driver: {
+        id: number;
+        name: string;
+    };
+}
+
+export interface IRideServiceConfirmRes {
+    success: boolean;
 }

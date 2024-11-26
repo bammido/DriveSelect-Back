@@ -27,6 +27,21 @@ export class Ride {
 
     @Column({ name: 'driver_id', type: 'int' })
     driver_id: number;
+    
+    @Column({ name: 'value', type: 'float' })
+    value: number;
+    
+    @Column({ name: 'distance', type: 'int' })
+    distance: number;
+
+    @Column({ name: 'destination', type: 'varchar' })
+    destination: string;
+
+    @Column({ name: 'origin', type: 'varchar' })
+    origin: string;
+    
+    @Column({ name: 'duration', type: 'varchar' })
+    duration: string;
 
     @ManyToOne(() => Customer, customer => customer.id)
     @JoinColumn({ name: 'customer_id' })

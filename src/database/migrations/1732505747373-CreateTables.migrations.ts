@@ -199,6 +199,26 @@ export class CreateTables1732505747373 implements MigrationInterface {
                     name: 'driver_id',
                     type: 'int',
                 },
+                {
+                    name: 'origin',
+                    type: 'varchar',
+                },
+                {
+                    name: 'destination',
+                    type: 'varchar',
+                },
+                {
+                    name: 'duration',
+                    type: 'varchar',
+                },
+                {
+                    name: 'distance',
+                    type: 'int',
+                },
+                {
+                    name: 'value',
+                    type: 'float',
+                },
             ]
         }))
 

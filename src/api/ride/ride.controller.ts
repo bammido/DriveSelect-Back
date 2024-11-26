@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import { rideEstimateValidator } from "./ride.validators";
+import { rideConfirmValidator, rideEstimateValidator } from "./ride.validators";
 import RideService from "./ride.service";
-import driverRepository from "../../database/repository/driver.repository";
 
 export default class RideController {
     private rideService = new RideService()
@@ -12,36 +11,90 @@ export default class RideController {
 
     async estimate(req: Request, res: Response) {
 
-        const { body } = req
+       try {
+            const { body } = req
 
-        const result = rideEstimateValidator.safeParse(body)
+            const result = rideEstimateValidator.safeParse(body)
 
-        if(!result.success) {
-            res.status(400).send({
-                error_code: "INVALID_DATA",
-                error_description: result.error.issues[0].message
+            if(!result.success) {
+                res.status(400).send({
+                    error_code: "INVALID_DATA",
+                    error_description: result.error.issues[0].message
+                })
+
+                return
+            }
+
+            if(result.data.destination === result.data.origin) {
+                res.status(400).send({
+                    error_code: "INVALID_DATA",
+                    error_description: "Os endereços de origem e destino não podem ser o mesmo endereço"
+                })
+
+                return
+            }
+
+            const response = await this.rideService.estimate(result.data)
+
+            if(this.rideService.isRideServiceError(response)){
+                res.send(response.status).send({
+                    error_code: response.error_code,
+                    error_description: response.error_description
+                })
+
+                return
+            }
+
+            res.send(response)
+       } catch (error: any) {
+            res.send(500).send({
+                error_code: "SERVER_ERROR",
+                error_description: error.message
             })
-
-            return
-        }
-
-        if(result.data.destination === result.data.origin) {
-            res.status(400).send({
-                error_code: "INVALID_DATA",
-                error_description: "Os endereços de origem e destino não podem ser o mesmo endereço"
-            })
-
-            return
-        }
-
-        const response = await this.rideService.estimate(result.data)
-
-        res.send({ response: response })
+       }
     }
 
-    async teste(req: Request, res: Response) {
-        const drivers = await driverRepository.estimateDriversPrice({ distanceMeters: 16910 })
+    async confirm(req: Request, res: Response) {
+        try {
+            const { body } = req
 
-        res.send({response: drivers})
+            const result = rideConfirmValidator.safeParse(body)
+
+            if(!result.success) {
+                res.status(400).send({
+                    error_code: "INVALID_DATA",
+                    error_description: result.error.issues[0].message
+                })
+
+                return
+            }
+
+            if(result.data.destination === result.data.origin) {
+                res.status(400).send({
+                    error_code: "INVALID_DATA",
+                    error_description: "Os endereços de origem e destino não podem ser o mesmo endereço"
+                })
+
+                return
+            }
+
+            const response = this.rideService.confirm(result.data)
+
+            if(this.rideService.isRideServiceError(response)){
+                res.send(response.status).send({
+                    error_code: response.error_code,
+                    error_description: response.error_description
+                })
+
+                return
+            }
+
+            res.send(response)
+        } catch (error: any) {
+            res.send(500).send({
+                error_code: "SERVER_ERROR",
+                error_description: error.message
+            })
+        }
     }
 }

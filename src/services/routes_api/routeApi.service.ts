@@ -52,7 +52,7 @@ export default class RouteApiService {
 
     }
 
-    isRouteApiError(response: IcallcomputeRoutesRes | RouteApiError): response is RouteApiError {
+    isRouteApiError(response: any | RouteApiError): response is RouteApiError {
         return (response as RouteApiError).error === true;
     }
 }

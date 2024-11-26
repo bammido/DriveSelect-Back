@@ -2,7 +2,7 @@ import { AppDataSource } from "../../dataSource"
 import { Driver } from "../entity/driver.entity"
 import { LessThanOrEqual } from "typeorm"
 
-class DriverRepository { 
+export class DriverRepository { 
     private driverRepository = AppDataSource.getRepository(Driver)
 
     async estimateDriversPrice({ distanceMeters }: { distanceMeters: number}) {
@@ -29,6 +29,10 @@ class DriverRepository {
 
         return driversCalculated;
     }
-}
 
-export default new DriverRepository()
+    async findDriver({ id } : { id: number }) {
+        return await this.driverRepository.findOne({
+            where: { id }
+        })
+    }
+}
