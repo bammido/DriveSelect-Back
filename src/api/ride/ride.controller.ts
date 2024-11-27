@@ -9,6 +9,7 @@ export default class RideController {
         this.estimate = this.estimate.bind(this);
         this.confirm = this.confirm.bind(this);
         this.getRide = this.getRide.bind(this);
+        this.getCustomerDrivers = this.getCustomerDrivers.bind(this);
     }
 
     async estimate(req: Request, res: Response) {
@@ -16,7 +17,6 @@ export default class RideController {
        try {
 
            const { body } = req
-           console.log('estimate', body)
 
             const result = rideEstimateValidator.safeParse(body)
 
@@ -102,6 +102,16 @@ export default class RideController {
         }
     }
 
+    async getCustomerDrivers(req: Request, res: Response) {
+        const { params } = req
+
+        const { customer_id } = params
+
+        const drivers = await this.rideService.getCustomerDrivers({ customer_id })
+
+        res.send({ drivers })
+    }
+
     async getRide(req: Request, res: Response) {
         try {
             const { params, query } = req
@@ -131,7 +141,6 @@ export default class RideController {
 
             res.send(rides)
         } catch (error: any) {
-            console.log(error)
             res.status(500).send({
                 error_code: "SERVER_ERROR",
                 error_description: error.message

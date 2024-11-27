@@ -3,7 +3,7 @@ import { Ride } from "../entity/ride.entity"
 
 
 export class RideRepository {
-    private driverRepository = AppDataSource.getRepository(Ride)
+    private rideRepository = AppDataSource.getRepository(Ride)
 
     async save(newRide: {
         destination: string;
@@ -14,14 +14,14 @@ export class RideRepository {
         duration: string;
         value: number;
     }) {
-        return await this.driverRepository.save(newRide)
+        return await this.rideRepository.save(newRide)
     }
 
     async getRides( whereOptions: {
         customer_id: string;
         driver_id?: number;
     }) {
-        return await this.driverRepository.find({ 
+        return await this.rideRepository.find({ 
             where: whereOptions,
             order: {
                 created_at: {
@@ -31,5 +31,15 @@ export class RideRepository {
             select: ["driver", "destination", "distance", "duration", "origin", "value", "id", "date"],
             relations: { driver: true}
         })
+    }
+
+    async getCustomerDrivers({customer_id }: { customer_id: string }) {
+        return await this.rideRepository
+            .query(`
+                SELECT DISTINCT d.id, d.name
+                FROM rides r
+                JOIN drivers d ON r.driver_id = d.id
+                WHERE r.customer_id = '${customer_id}';
+            `)
     }
 }

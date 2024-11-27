@@ -5,7 +5,7 @@ import { Ride } from "./ride.entity";
 @Entity({ name: "customers" })
 export class Customer {
     @PrimaryColumn({ name: 'id','type': 'varchar'})
-    id: number
+    id: string
 
     @CreateDateColumn({
         name: 'created_at',

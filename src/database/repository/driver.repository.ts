@@ -35,4 +35,8 @@ export class DriverRepository {
             where: { id }
         })
     }
+    
+    async findAllDrivers() {
+        return await this.driverRepository.find()
+    }
 }

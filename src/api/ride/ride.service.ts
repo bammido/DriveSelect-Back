@@ -1,3 +1,4 @@
+import { CustomerRepository } from "../../database/repository/customer.repository";
 import { DriverRepository } from "../../database/repository/driver.repository";
 import { RideRepository } from "../../database/repository/ride.repository";
 import RouteApiService from "../../services/routes_api/routeApi.service";
@@ -7,6 +8,7 @@ export default class RideService {
     private routeApiService = new RouteApiService();
     private driverRepository = new DriverRepository();
     private rideRepository = new RideRepository()
+    private customerRepository = new CustomerRepository()
 
     constructor() {
         this.estimate = this.estimate.bind(this)
@@ -74,6 +76,8 @@ export default class RideService {
             }
         }
 
+        await this.customerRepository.create({ customer_id: ride.customer_id })
+
         await this.rideRepository.save({
             customer_id: ride.customer_id,
             destination: ride.destination,
@@ -87,6 +91,12 @@ export default class RideService {
         return { 
             success: true
          }
+    }
+
+    async getCustomerDrivers({ customer_id }: { customer_id: string }) {
+        const drivers =  await this.rideRepository.getCustomerDrivers({ customer_id })
+
+        return drivers
     }
 
     async getRides({
