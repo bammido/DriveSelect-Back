@@ -14,8 +14,8 @@ export const AppDataSource = new DataSource({
     database: "postgres",
     synchronize: false,
     logging: false,
-    entities: [`./${process.env.Environment === 'prod'? 'dist' : 'src'}/database/entity/*.entity.*`],
-    migrations: [`./${process.env.Environment === 'prod'? 'dist' : 'src'}/database/migrations/*.migrations.*`],
+    entities: [`./${process.env.ENVIRONMENT === 'prod'? 'dist' : 'src'}/database/entity/*.entity.*`],
+    migrations: [`./${process.env.ENVIRONMENT === 'prod'? 'dist' : 'src'}/database/migrations/*.migrations.*`],
     subscribers: [],
 })
 
