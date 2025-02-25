@@ -8,6 +8,7 @@
     "start": "node ./dist/index.js",
     "dev": "ts-node-dev ./src/index.ts",
     "migration:run": "npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts",
+    "migration:revert": "npx typeorm-ts-node-commonjs migration:revert -d ./src/dataSource.ts",
     "start:docker": "npm run migration:run && npm run start",
     "build": "tsc"
   },
@@ -26,6 +27,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "mysql": "^2.18.1",
     "pg": "^8.13.1",
     "typeorm": "^0.3.20",
     "zod": "^3.23.8"

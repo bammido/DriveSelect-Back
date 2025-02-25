@@ -5,13 +5,25 @@ dotenv.config()
 
 console.log(process.env.TYPEORM_PORT)
 
+type SQLTypes = "mysql" | "mariadb" | "postgres" |"sqlite"
+
+let sqlType: SQLTypes = "postgres"
+
+switch (process.env.TYPEORM_TYPE) {
+    case "mysql":
+        sqlType = "mysql"
+        break;
+    default:
+        break;
+}
+
 export const AppDataSource = new DataSource({
-    type: "postgres",
+    type: sqlType,
     host: process.env.TYPEORM_HOST || 'localhost',
     port: Number(process.env.TYPEORM_PORT || 5428),
     username: process.env.TYPEORM_USER || "postgres",
     password: process.env.TYPEORM_PASSWORD || "12345",
-    database: "postgres",
+    database: process.env.TYPEORM_DB || "postgres",
     synchronize: false,
     logging: false,
     entities: [`./${process.env.ENVIRONMENT === 'prod'? 'dist' : 'src'}/database/entity/*.entity.*`],
