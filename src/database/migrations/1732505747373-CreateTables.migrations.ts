@@ -19,7 +19,7 @@ export class CreateTables1732505747373 implements MigrationInterface {
                 {
                     name: 'updated_at',
                     type: 'timestamp',
-                    // default: 'now()',
+                    default: 'now()',
                 }
             ]
         }))
@@ -42,7 +42,7 @@ export class CreateTables1732505747373 implements MigrationInterface {
                 {
                     name: 'updated_at',
                     type: 'timestamp',
-                    // default: 'now()',
+                    default: 'now()',
                 },
                 {
                     name: 'brand',
@@ -83,7 +83,7 @@ export class CreateTables1732505747373 implements MigrationInterface {
                 {
                     name: 'updated_at',
                     type: 'timestamp',
-                    // default: 'now()',
+                    default: 'now()',
                 },
                 {
                     name: 'name',
@@ -136,7 +136,7 @@ export class CreateTables1732505747373 implements MigrationInterface {
                 {
                     name: 'updated_at',
                     type: 'timestamp',
-                    // default: 'now()',
+                    default: 'now()',
                 },
                 {
                     name: 'rating',
@@ -193,12 +193,12 @@ export class CreateTables1732505747373 implements MigrationInterface {
                 {
                     name: 'updated_at',
                     type: 'timestamp',
-                    // default: 'now()',
+                    default: 'now()',
                 },
                 {
                     name: 'date',
                     type: 'timestamp',
-                    // default: 'now()'
+                    default: 'now()'
                 },
                 {
                     name: 'customer_id',
