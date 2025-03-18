@@ -14,7 +14,5 @@ VOLUME ["/var/lib/postgresql/data"]
 
 FROM node:18
 WORKDIR /usr/src/drive-select-back
-COPY --from=build /usr/src/drive-select-back .
-COPY --from=db /var/lib/postgresql/data /var/lib/postgresql/data
 EXPOSE 8080
 CMD ["npm", "run", "start:docker"]
